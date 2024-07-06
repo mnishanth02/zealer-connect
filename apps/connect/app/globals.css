@@ -1,0 +1,96 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: 142.4 100% 95%;
+  --foreground: 142.4 5% 0%;
+  --card: 142.4 50% 90%;
+  --card-foreground: 142.4 5% 10%;
+  --popover: 142.4 100% 95%;
+  --popover-foreground: 142.4 100% 0%;
+  --primary: 142.4 71.8% 29.2%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 142.4 30% 70%;
+  --secondary-foreground: 0 0% 0%;
+  --muted: 104.4 30% 85%;
+  --muted-foreground: 142.4 5% 35%;
+  --accent: 104.4 30% 80%;
+  --accent-foreground: 142.4 5% 10%;
+  --destructive: 0 100% 30%;
+  --destructive-foreground: 142.4 5% 90%;
+  --border: 142.4 30% 50%;
+  --input: 142.4 30% 18%;
+  --ring: 142.4 71.8% 29.2%;
+  --radius: 1rem;
+}
+.dark {
+  --background: 142.4 50% 5%;
+  --foreground: 142.4 5% 90%;
+  --card: 142.4 50% 0%;
+  --card-foreground: 142.4 5% 90%;
+  --popover: 142.4 50% 5%;
+  --popover-foreground: 142.4 5% 90%;
+  --primary: 142.4 71.8% 29.2%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 142.4 30% 10%;
+  --secondary-foreground: 0 0% 100%;
+  --muted: 104.4 30% 15%;
+  --muted-foreground: 142.4 5% 60%;
+  --accent: 104.4 30% 15%;
+  --accent-foreground: 142.4 5% 90%;
+  --destructive: 0 100% 30%;
+  --destructive-foreground: 142.4 5% 90%;
+  --border: 142.4 30% 18%;
+  --input: 142.4 30% 18%;
+  --ring: 142.4 71.8% 29.2%;
+  --radius: 1rem;
+}
+
+* {
+  box-sizing: border-box;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  scroll-behavior: smooth;
+}
+
+html,
+body {
+  height: 100%;
+  overflow-x: hidden;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+  a {
+    @apply text-foreground;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+  .h-cover {
+    @apply min-h-[calc(88vh)];
+  }
+  .wrapper {
+    @apply w-full max-w-7xl p-5 md:px-10 lg:mx-auto xl:px-0;
+  }
+}
+
+/* browser scrollbar */
+::-webkit-scrollbar {
+  @apply bg-primary/20 h-1 w-[6px];
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-primary/60 rounded-full;
+}
