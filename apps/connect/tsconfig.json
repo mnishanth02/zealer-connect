@@ -7,15 +7,32 @@
       }
     ],
     "paths": {
-      "@/*": ["./*"],
-      "@ui/*": ["../../packages/ui/src/*"],
-      "@/public/*": ["./public/*"],
-      "@server-actions/*": ["./server-actions/*"],
-      "@services/*": ["./services/*"],
-      "@shared/*": ["./shared/*"],
-      "@data-access/*": ["./data-access/*"],
-      "@store/*": ["./store/*"]
-    }
+      "@/*": [
+        "./*"
+      ],
+      "@ui/*": [
+        "../../packages/ui/src/*"
+      ],
+      "@/public/*": [
+        "./public/*"
+      ],
+      "@server-actions/*": [
+        "./server-actions/*"
+      ],
+      "@services/*": [
+        "./services/*"
+      ],
+      "@shared/*": [
+        "./shared/*"
+      ],
+      "@data-access/*": [
+        "./data-access/*"
+      ],
+      "@store/*": [
+        "./store/*"
+      ]
+    },
+    "jsx": "preserve"
   },
   "include": [
     "next-env.d.ts",
@@ -25,5 +42,7 @@
     ".next/types/**/*.ts",
     "postcss.config.mjs"
   ],
-  "exclude": ["node_modules"]
+  "exclude": [
+    "node_modules"
+  ]
 }

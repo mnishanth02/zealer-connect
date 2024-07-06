@@ -24,7 +24,8 @@ export function Providers({ children }: { children: ReactNode }) {
         />
         <TooltipProvider delayDuration={0}>{children}</TooltipProvider>
         <Toaster
-          position="top-center"
+          position="bottom-right"
+          richColors
           duration={3000}
           toastOptions={{ style: { textAlign: "center" } }}
         />

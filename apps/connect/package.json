@@ -6,7 +6,14 @@
     "dev": "next dev --turbo",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "tsx data-access/orm/migrate.ts",
+    "db:drop": "drizzle-kit drop",
+    "db:pull": "drizzle-kit introspect",
+    "db:push": "drizzle-kit push",
+    "db:studio": "drizzle-kit studio",
+    "db:check": "drizzle-kit check"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.0",
@@ -20,6 +27,7 @@
     "@tanstack/react-query": "^5.50.1",
     "@tanstack/react-query-devtools": "^5.50.1",
     "date-fns": "^3.6.0",
+    "drizzle-kit": "^0.22.8",
     "drizzle-orm": "^0.31.2",
     "drizzle-zod": "^0.5.1",
     "lucia": "^3.2.0",
@@ -46,6 +54,7 @@
     "eslint-config-next": "14.2.4",
     "postcss": "^8.4.39",
     "tailwindcss": "^3.4.4",
+    "tsx": "^4.16.2",
     "typescript": "^5.5.3"
   }
 }
