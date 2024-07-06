@@ -5,7 +5,17 @@
       {
         "name": "next"
       }
-    ]
+    ],
+    "paths": {
+      "@/*": ["./*"],
+      "@ui/*": ["../../packages/ui/src/*"],
+      "@/public/*": ["./public/*"],
+      "@server-actions/*": ["./server-actions/*"],
+      "@services/*": ["./services/*"],
+      "@shared/*": ["./shared/*"],
+      "@data-access/*": ["./data-access/*"],
+      "@store/*": ["./store/*"]
+    }
   },
   "include": [
     "next-env.d.ts",
