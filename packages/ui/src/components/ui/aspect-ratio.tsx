@@ -1,3 +1,4 @@
+/* eslint-disable no-redeclare */
 "use client";
 
 import * as AspectRatioPrimitive from "@radix-ui/react-aspect-ratio";

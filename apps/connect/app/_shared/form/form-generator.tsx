@@ -1,24 +1,13 @@
+"use client";
+
 import { Calendar } from "@ui/components/ui/calendar";
 import { Input } from "@ui/components/ui/input";
 import { Label } from "@ui/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@ui/components/ui/radio-group";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@ui/components/ui/select";
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@ui/components/ui/select";
 import { Switch } from "@ui/components/ui/switch";
 import { Textarea } from "@ui/components/ui/textarea";
-import {
-  Control,
-  Controller,
-  FieldErrors,
-  FieldValues,
-  UseFormRegister,
-} from "react-hook-form";
+import { Control, Controller, FieldErrors, FieldValues } from "react-hook-form";
 
 type Props = {
   type: "text" | "email" | "password" | "date" | "radio" | "switch";
@@ -27,7 +16,6 @@ type Props = {
   label?: string;
   control: Control<any>;
   placeholder: string;
-  register: UseFormRegister<any>;
   name: string;
   errors: FieldErrors<FieldValues>;
   lines?: number;
@@ -143,11 +131,7 @@ const FormGenerator = ({
           control={control}
           defaultValue={defaultValue}
           render={({ field }) => (
-            <RadioGroup
-              onValueChange={field.onChange}
-              defaultValue={field.value}
-              className="flex flex-col space-y-1"
-            >
+            <RadioGroup onValueChange={field.onChange} defaultValue={field.value} className="flex flex-col space-y-1">
               {label && <Label>{label}</Label>}
               {options?.map((option) => (
                 <div key={option.id} className="flex items-center space-x-2">
@@ -168,18 +152,12 @@ const FormGenerator = ({
               control={control}
               defaultValue={defaultValue as boolean}
               render={({ field }) => (
-                <Switch
-                  checked={field.value}
-                  onCheckedChange={field.onChange}
-                  id={`switch-${name}`}
-                />
+                <Switch checked={field.value} onCheckedChange={field.onChange} id={`switch-${name}`} />
               )}
             />
             <Label htmlFor={`switch-${name}`}>{label}</Label>
           </div>
-          {switchDescription && (
-            <p className="text-sm text-gray-500">{switchDescription}</p>
-          )}
+          {switchDescription && <p className="text-sm text-gray-500">{switchDescription}</p>}
           {renderErrorMessage(name)}
         </div>
       );
@@ -192,12 +170,7 @@ const FormGenerator = ({
             control={control}
             defaultValue={defaultValue as Date}
             render={({ field }) => (
-              <Calendar
-                mode="single"
-                selected={field.value}
-                onSelect={field.onChange}
-                className="rounded-md border"
-              />
+              <Calendar mode="single" selected={field.value} onSelect={field.onChange} className="rounded-md border" />
             )}
           />
           {renderErrorMessage(name)}

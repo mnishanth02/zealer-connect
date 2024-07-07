@@ -11,30 +11,20 @@ import SignUpForm from "./signup-form";
 
 interface SignUpProviderProps {}
 
-const SignUpProvider: FC<SignUpProviderProps> = ({}) => {
+const SignUpProvider: FC<SignUpProviderProps> = () => {
   const { methods, onHandleSubmit, loading } = useSignUpForm();
 
   return (
     <FormProvider {...methods}>
       <form onSubmit={onHandleSubmit}>
         <Card className="mx-auto min-w-[400px] max-w-sm">
-          <SignUpForm control={methods.control} />
+          <SignUpForm />
 
           <CardFooter className="flex flex-col gap-4">
-            <Button
-              isLoading={loading}
-              disabled={loading}
-              type="submit"
-              className="w-full"
-            >
+            <Button isLoading={loading} disabled={loading} type="submit" className="w-full">
               Create an account
             </Button>
-            <Button
-              disabled={loading}
-              type="button"
-              variant="outline"
-              className="w-full"
-            >
+            <Button disabled={loading} type="button" variant="outline" className="w-full">
               Sign up with Google
             </Button>
             <div className="mt-4 text-center text-sm">
