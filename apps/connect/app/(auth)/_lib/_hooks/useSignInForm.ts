@@ -1,13 +1,13 @@
-import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "@ui/components/ui/sonner";
 import { useForm } from "react-hook-form";
+import { useServerAction } from "zsa-react";
 
 import { UserLoginSchema, UserLoginType } from "@/app/_shared/_schema/auth-form-schema";
 
-export const useSignInForm = () => {
-  const [loading, setLoading] = useState<boolean>(false);
+import { signInAction } from "../auth-actions";
 
+export const useSignInForm = () => {
   const methods = useForm<UserLoginType>({
     resolver: zodResolver(UserLoginSchema),
     defaultValues: {
@@ -16,19 +16,17 @@ export const useSignInForm = () => {
     },
     mode: "onChange",
   });
+  const { execute, isPending } = useServerAction(signInAction, {
+    onError({ err }) {
+      toast.error(err.message);
+    },
+    onSuccess() {
+      toast.success("Logged in successfully");
+    },
+  });
 
   const onSubmit = async (values: UserLoginType) => {
-    try {
-      setLoading(true);
-      console.log("values->", values);
-
-      // await signUpAction(values);
-      toast.success("Login successfully");
-    } catch (error) {
-      toast.error("Error while login");
-    } finally {
-      setLoading(false);
-    }
+    execute(values);
   };
 
   const onHandleSubmit = methods.handleSubmit(onSubmit);
@@ -36,6 +34,6 @@ export const useSignInForm = () => {
   return {
     methods,
     onHandleSubmit,
-    loading,
+    isPending,
   };
 };

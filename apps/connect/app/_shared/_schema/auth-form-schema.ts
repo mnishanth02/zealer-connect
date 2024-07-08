@@ -5,14 +5,17 @@ import { userRoleEnum } from "@/data-access/orm/schema";
 // *******************  Enum  ******************************
 
 const UserRoleEnum = z.enum(["public", "athlete", "admin"]);
-export type UserRoleEnumType = typeof userRoleEnum;
+export type UserRoleEnumT = typeof userRoleEnum;
+
+const AccountTypeEnum = z.enum(["email", "google", "strava"]);
+export type AccountTypeEnumT = typeof AccountTypeEnum._type;
 
 // *******************  Schema  ******************************
 
 export const UserSignupSchema = z.object({
-  role: UserRoleEnum,
   name: z.string().min(3, { message: "Name too short (min 3 chars)" }),
   email: z.string().email({ message: "Invalid email format" }),
+  role: UserRoleEnum,
   password: z
     .string()
     .min(8, { message: "Password too weak (min 8 chars)" })

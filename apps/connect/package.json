@@ -26,6 +26,7 @@
     "@tanstack/react-query-devtools": "^5.50.1",
     "arctic": "^1.9.1",
     "date-fns": "^3.6.0",
+    "dotenv": "^16.4.5",
     "drizzle-kit": "^0.22.8",
     "drizzle-orm": "^0.31.2",
     "drizzle-zod": "^0.5.1",

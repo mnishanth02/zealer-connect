@@ -5,12 +5,12 @@ import { ZSAError } from "zsa";
 
 import { AFTER_LOGIN_URL } from "@/lib/app-config";
 import { ErrorCode, getHttpStatusFromErrorCode } from "@/lib/helper/errors";
-import { rateLimitByIp } from "@/lib/helper/limiter";
+import { rateLimitByIp, rateLimitByKey } from "@/lib/helper/limiter";
 import { setSession } from "@/lib/helper/session";
 import { unauthenticatedAction } from "@/lib/safe-action";
-import { UserSignupSchema } from "@/app/_shared/_schema/auth-form-schema";
+import { UserLoginSchema, UserSignupSchema } from "@/app/_shared/_schema/auth-form-schema";
 
-import { signupService } from "@/services/auth-service";
+import { signInService, signupService } from "@/services/auth-service";
 
 export const signUpAction = unauthenticatedAction
   .createServerAction()
@@ -32,4 +32,26 @@ export const signUpAction = unauthenticatedAction
     //  if error retirn ZsaError
     await setSession(data);
     return redirect(AFTER_LOGIN_URL);
+  });
+
+export const signInAction = unauthenticatedAction
+  .createServerAction()
+  .input(UserLoginSchema)
+  .handler(async ({ input }) => {
+    await rateLimitByKey({ key: input.email, limit: 3, window: 10000 });
+
+    // const { data, error } = await signupService(input);
+
+    const { data, error } = await signInService(input);
+
+    if (error) {
+      const status = getHttpStatusFromErrorCode(error.code);
+      throw new ZSAError(error.code, { status, cause: error });
+    }
+
+    if (!data) {
+      throw new ZSAError(ErrorCode.ERROR, { status: 500, message: "Failed to create account" });
+    }
+    await setSession(data);
+    redirect(AFTER_LOGIN_URL);
   });

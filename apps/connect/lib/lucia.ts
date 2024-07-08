@@ -3,7 +3,7 @@ import { cookies } from "next/headers";
 import { DrizzlePostgreSQLAdapter } from "@lucia-auth/adapter-drizzle";
 import { Lucia, type Session, type User } from "lucia";
 
-import { UserRoleEnumType } from "@/app/_shared/_schema/auth-form-schema";
+import { UserRoleEnumT } from "@/app/_shared/_schema/auth-form-schema";
 
 import { db } from "@/data-access/orm/db";
 import { sessions, users } from "@/data-access/orm/schema";
@@ -39,7 +39,7 @@ declare module "lucia" {
 interface DatabaseUserAttributes {
   email: string;
   name: string;
-  role: UserRoleEnumType;
+  role: UserRoleEnumT;
 }
 
 export const validateRequest = cache(

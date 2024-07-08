@@ -1,15 +1,19 @@
 import crypto from "crypto";
-import { createId } from "@paralleldrive/cuid2";
 import { z } from "zod";
 
-import { AppError, EmailInUseError, ErrorCode } from "@/lib/helper/errors";
-import { UserSignupSchema, UserSignupType } from "@/app/_shared/_schema/auth-form-schema";
+import { AppError, EmailInUseError, ErrorCode, LoginError } from "@/lib/helper/errors";
+import { UserLoginSchema, UserSignupSchema, UserSignupType } from "@/app/_shared/_schema/auth-form-schema";
 
-import { InsertUserType } from "@/data-access/orm/schema/auth-db-schema";
-import { createUser, getUserByEmail } from "@/data-access/repositories/auth-repo";
+import { InsertProfileType, SelectUserType } from "@/data-access/orm/schema/auth-db-schema";
+import {
+  createAccount,
+  createProfile,
+  createUser,
+  getAccountByUserId,
+  getUserByEmail,
+} from "@/data-access/repositories/auth-repo";
 import { ServiceResponse } from "@/shared/type";
 
-const ITERATIONS = 10000;
 export async function signupService(userData: z.infer<typeof UserSignupSchema>): Promise<ServiceResponse<string>> {
   try {
     const existingUser = await getUserByEmail(userData.email);
@@ -17,15 +21,20 @@ export async function signupService(userData: z.infer<typeof UserSignupSchema>):
       throw new EmailInUseError();
     }
 
-    const dbData = await convertToDbUser(userData);
-    const insertedUser = await createUser(dbData);
+    const user = await createUser(userData.email);
 
-    if (!insertedUser) {
+    if (!user) {
       throw new AppError(ErrorCode.INTERNAL_SERVER_ERROR, "Failed to create user");
     }
 
+    const salt = crypto.randomBytes(128).toString("base64");
+    const hashedPassword = await hashPassword(userData.password, salt);
+    await createAccount(user.id, hashedPassword, salt);
+
+    await createProfile(getProfileData(userData, user.id));
+
     return {
-      data: insertedUser.id,
+      data: user.id,
       error: null,
     };
   } catch (error) {
@@ -45,21 +54,55 @@ export async function signupService(userData: z.infer<typeof UserSignupSchema>):
   }
 }
 
-async function convertToDbUser(userData: UserSignupType) {
-  const salt = crypto.randomBytes(128).toString("base64");
-  const hashedPassword = await hashPassword(userData.password, salt);
+export async function signInService(userData: z.infer<typeof UserLoginSchema>): Promise<ServiceResponse<string>> {
+  try {
+    const user = await getUserByEmail(userData.email);
+    if (!user) {
+      throw new LoginError();
+    }
 
-  const dbData: InsertUserType = {
-    id: createId(),
-    email: userData.email,
-    hashedPassword: hashedPassword,
-    name: userData.name,
-    role: userData.role,
-  };
+    const isPasswordCorrect = await verifyPassword(user, userData.password);
 
-  return dbData;
+    if (!isPasswordCorrect) {
+      throw new LoginError();
+    }
+
+    return {
+      data: user.id,
+      error: null,
+    };
+  } catch (error) {
+    if (error instanceof AppError) {
+      return {
+        data: null,
+        error: error,
+      };
+    }
+    console.error("Login error:", error);
+    return {
+      data: null,
+      error: new AppError(ErrorCode.INTERNAL_SERVER_ERROR, "Error while Login", {
+        originalError: error instanceof Error ? error.message : String(error),
+      }),
+    };
+  }
 }
 
+//  ******************* Helper Function ********************
+
+function getProfileData(userData: UserSignupType, userId: string) {
+  const dbProfile: InsertProfileType = {
+    userId,
+    displayName: userData.email,
+    role: userData.role,
+    imageUrl: "",
+    bio: "",
+  };
+
+  return dbProfile;
+}
+
+const ITERATIONS = 10000;
 async function hashPassword(plainTextPassword: string, salt: string) {
   return new Promise<string>((resolve, reject) => {
     crypto.pbkdf2(plainTextPassword, salt, ITERATIONS, 64, "sha512", (err, derivedKey) => {
@@ -67,4 +110,22 @@ async function hashPassword(plainTextPassword: string, salt: string) {
       resolve(derivedKey.toString("hex"));
     });
   });
+}
+
+export async function verifyPassword(user: SelectUserType, plainTextPassword: string) {
+  const account = await getAccountByUserId(user.id);
+
+  if (!account) {
+    return false;
+  }
+
+  const salt = account.salt;
+  const savedPassword = account.hashedPassword;
+
+  if (!salt || !savedPassword) {
+    return false;
+  }
+
+  const hash = await hashPassword(plainTextPassword, salt);
+  return account.hashedPassword == hash;
 }

@@ -8,8 +8,6 @@ import { UserSignupSchema, UserSignupType } from "@/app/_shared/_schema/auth-for
 import { signUpAction } from "../auth-actions";
 
 export const useSignUpForm = () => {
-  // const [loading, setLoading] = useState<boolean>(false);
-
   const methods = useForm<UserSignupType>({
     resolver: zodResolver(UserSignupSchema),
     defaultValues: {
