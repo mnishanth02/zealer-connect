@@ -1,4 +1,4 @@
-type UserRegistrationFormProps = {
+type SignupFormProps = {
   id: string;
   type: "text" | "email" | "password" | "date" | "radio" | "switch";
   inputType: "select" | "input" | "textarea" | "radio" | "switch" | "date";
@@ -10,7 +10,7 @@ type UserRegistrationFormProps = {
   width?: string;
 };
 
-export const USER_REGISTRATION_FORM: UserRegistrationFormProps[] = [
+export const USER_REGISTRATION_FORM: SignupFormProps[] = [
   {
     id: "1",
     inputType: "input",
@@ -44,7 +44,7 @@ export const USER_REGISTRATION_FORM: UserRegistrationFormProps[] = [
     id: "4",
     inputType: "select",
     placeholder: "Type",
-    name: "type",
+    name: "role",
     type: "text",
     row: 4,
     width: "w-full",
@@ -68,7 +68,7 @@ export const USER_REGISTRATION_FORM: UserRegistrationFormProps[] = [
   },
 ];
 
-export const USER_LOGIN_FORM: UserRegistrationFormProps[] = [
+export const USER_LOGIN_FORM: SignupFormProps[] = [
   {
     id: "1",
     inputType: "input",

@@ -1,8 +1,11 @@
 import { sql } from "drizzle-orm";
 import { pgTable, text, timestamp } from "drizzle-orm/pg-core";
+import { createInsertSchema, createSelectSchema } from "drizzle-zod";
+import { z } from "zod";
 
 import { userRoleEnum } from "./enums";
 
+//  ************************* Table Schema ******************** //
 export const users = pgTable("user", {
   id: text("id").primaryKey(),
   email: text("email").notNull().unique(),
@@ -27,3 +30,12 @@ export const sessions = pgTable("session", {
     mode: "date",
   }).notNull(),
 });
+
+//  ************************* Schema ******************** //
+
+export const insertUserSchema = createInsertSchema(users);
+export const selectUserSchema = createSelectSchema(users);
+
+//  ************************* Type ******************** //
+
+export type InsertUserType = z.infer<typeof insertUserSchema>;

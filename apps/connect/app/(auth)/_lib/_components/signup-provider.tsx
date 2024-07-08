@@ -12,7 +12,7 @@ import SignUpForm from "./signup-form";
 interface SignUpProviderProps {}
 
 const SignUpProvider: FC<SignUpProviderProps> = () => {
-  const { methods, onHandleSubmit, loading } = useSignUpForm();
+  const { methods, onHandleSubmit, isPending } = useSignUpForm();
 
   return (
     <FormProvider {...methods}>
@@ -21,10 +21,10 @@ const SignUpProvider: FC<SignUpProviderProps> = () => {
           <SignUpForm />
 
           <CardFooter className="flex flex-col gap-4">
-            <Button isLoading={loading} disabled={loading} type="submit" className="w-full">
+            <Button isLoading={isPending} disabled={isPending} type="submit" className="w-full">
               Create an account
             </Button>
-            <Button disabled={loading} type="button" variant="outline" className="w-full">
+            <Button disabled={isPending} type="button" variant="outline" className="w-full">
               Sign up with Google
             </Button>
             <div className="mt-4 text-center text-sm">

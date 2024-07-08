@@ -1,6 +1,6 @@
 import Image from "next/image";
 
-import SignUpProvider from "../_components/signup-provider";
+import SignUpProvider from "../_lib/_components/signup-provider";
 
 export default function SignUp() {
   return (

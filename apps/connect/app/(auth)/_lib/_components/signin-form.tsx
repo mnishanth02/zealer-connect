@@ -3,7 +3,7 @@ import { cn } from "@ui/lib/utils";
 import { useFormContext } from "react-hook-form";
 
 import { USER_LOGIN_FORM } from "@/app/_shared/_constants/auth-constants";
-import FormGenerator from "@/app/_shared/form/form-generator";
+import FormGenerator from "@/app/_shared/_form/form-generator";
 
 type FormField = (typeof USER_LOGIN_FORM)[0] & {
   row?: number;

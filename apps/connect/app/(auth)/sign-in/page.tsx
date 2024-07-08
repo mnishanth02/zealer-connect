@@ -1,6 +1,6 @@
 import Image from "next/image";
 
-import SignInProvider from "../_components/signin-provider";
+import SignInProvider from "../_lib/_components/signin-provider";
 
 export default function SignIn() {
   return (

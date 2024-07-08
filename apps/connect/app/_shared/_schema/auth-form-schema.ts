@@ -1,13 +1,16 @@
 import { z, ZodType } from "zod";
 
+import { userRoleEnum } from "@/data-access/orm/schema";
+
 // *******************  Enum  ******************************
 
 const UserRoleEnum = z.enum(["public", "athlete", "admin"]);
+export type UserRoleEnumType = typeof userRoleEnum;
 
 // *******************  Schema  ******************************
 
-export const UserRegistrationSchema: ZodType<UserRegistrationProps> = z.object({
-  type: UserRoleEnum,
+export const UserSignupSchema = z.object({
+  role: UserRoleEnum,
   name: z.string().min(3, { message: "Name too short (min 3 chars)" }),
   email: z.string().email({ message: "Invalid email format" }),
   password: z
@@ -16,20 +19,14 @@ export const UserRegistrationSchema: ZodType<UserRegistrationProps> = z.object({
     .max(64, {
       message: "Password too long (max 64 chars)",
     })
-    .refine(
-      (value) => /^[a-zA-Z0-9_.-]*$/.test(value ?? ""),
-      "Use only letters, numbers, and common symbols"
-    ),
+    .refine((value) => /^[a-zA-Z0-9_.-]*$/.test(value ?? ""), "Use only letters, numbers, and common symbols"),
 });
 
-export const UserLoginSchema: ZodType<UserLoginProps> = z.object({
+export const UserLoginSchema = z.object({
   email: z.string().email({ message: "Invalid email" }),
-  password: z
-    .string()
-    .min(8, { message: "Password too weak (min 8 chars)" })
-    .max(64, {
-      message: "Password too long (max 64 chars)",
-    }),
+  password: z.string().min(8, { message: "Password too weak (min 8 chars)" }).max(64, {
+    message: "Password too long (max 64 chars)",
+  }),
 });
 
 export const ChangePasswordSchema: ZodType<ChangePasswordProps> = z
@@ -40,10 +37,7 @@ export const ChangePasswordSchema: ZodType<ChangePasswordProps> = z
       .max(64, {
         message: "Password too long (max 64 chars)",
       })
-      .refine(
-        (value) => /^[a-zA-Z0-9_.-]*$/.test(value ?? ""),
-        "Use only letters, numbers, and common symbols"
-      ),
+      .refine((value) => /^[a-zA-Z0-9_.-]*$/.test(value ?? ""), "Use only letters, numbers, and common symbols"),
     confirmPassword: z.string(),
   })
   .refine((schema) => schema.password === schema.confirmPassword, {
@@ -53,17 +47,8 @@ export const ChangePasswordSchema: ZodType<ChangePasswordProps> = z
 
 // *******************  Types  ******************************
 
-export type UserRegistrationProps = {
-  type: z.infer<typeof UserRoleEnum>;
-  name: string;
-  email: string;
-  password: string;
-};
-
-export type UserLoginProps = {
-  email: string;
-  password: string;
-};
+export type UserSignupType = z.infer<typeof UserSignupSchema>;
+export type UserLoginType = z.infer<typeof UserLoginSchema>;
 
 export type ChangePasswordProps = {
   password: string;
