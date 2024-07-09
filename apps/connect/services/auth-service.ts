@@ -21,7 +21,7 @@ export async function signupService(userData: z.infer<typeof UserSignupSchema>):
       throw new EmailInUseError();
     }
 
-    const user = await createUser(userData.email);
+    const user = await createUser(userData.email, userData.role);
 
     if (!user) {
       throw new AppError(ErrorCode.INTERNAL_SERVER_ERROR, "Failed to create user");
@@ -94,7 +94,6 @@ function getProfileData(userData: UserSignupType, userId: string) {
   const dbProfile: InsertProfileType = {
     userId,
     displayName: userData.email,
-    role: userData.role,
     imageUrl: "",
     bio: "",
   };

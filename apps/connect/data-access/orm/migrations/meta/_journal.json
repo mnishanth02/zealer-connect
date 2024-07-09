@@ -15,6 +15,13 @@
       "when": 1720456369900,
       "tag": "0001_dapper_polaris",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1720507196640,
+      "tag": "0002_panoramic_blur",
+      "breakpoints": true
     }
   ]
 }

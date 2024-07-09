@@ -2,6 +2,7 @@ import { createId } from "@paralleldrive/cuid2";
 import { eq } from "drizzle-orm";
 
 import { AppError, ErrorCode } from "@/lib/helper/errors";
+import { UserRoleEnumT } from "@/app/_shared/_schema/auth-form-schema";
 
 import { db } from "../orm/db";
 import { users } from "../orm/schema";
@@ -23,17 +24,19 @@ export async function getUserByEmail(email: string) {
   }
 }
 
-export async function createUser(email: string) {
+export async function createUser(email: string, role: UserRoleEnumT) {
   try {
     const [user] = await db
       .insert(users)
       .values({
         id: createId(),
         email,
+        role,
       })
       .returning({
         id: users.id,
         email: users.email,
+        role: users.role,
       });
     return user;
   } catch (error) {

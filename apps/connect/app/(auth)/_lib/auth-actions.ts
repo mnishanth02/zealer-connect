@@ -1,5 +1,6 @@
 "use server";
 
+import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { ZSAError } from "zsa";
 
@@ -7,6 +8,7 @@ import { AFTER_LOGIN_URL } from "@/lib/app-config";
 import { ErrorCode, getHttpStatusFromErrorCode } from "@/lib/helper/errors";
 import { rateLimitByIp, rateLimitByKey } from "@/lib/helper/limiter";
 import { setSession } from "@/lib/helper/session";
+import { lucia, validateRequest } from "@/lib/lucia";
 import { unauthenticatedAction } from "@/lib/safe-action";
 import { UserLoginSchema, UserSignupSchema } from "@/app/_shared/_schema/auth-form-schema";
 
@@ -23,7 +25,7 @@ export const signUpAction = unauthenticatedAction
 
     if (error) {
       const status = getHttpStatusFromErrorCode(error.code);
-      throw new ZSAError(error.code, { status, cause: error });
+      throw new ZSAError(error.code, { status, error });
     }
 
     if (!data) {
@@ -55,3 +57,15 @@ export const signInAction = unauthenticatedAction
     await setSession(data);
     redirect(AFTER_LOGIN_URL);
   });
+
+export const signOutACtion = async () => {
+  const { session } = await validateRequest();
+  if (!session) {
+    redirect("/sign-in");
+  }
+
+  await lucia.invalidateSession(session.id);
+  const sessionCookie = lucia.createBlankSessionCookie();
+  cookies().set(sessionCookie.name, sessionCookie.value, sessionCookie.attributes);
+  redirect("/");
+};

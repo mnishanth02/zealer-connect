@@ -10,6 +10,7 @@ export const users = pgTable("user", {
   id: text("id").primaryKey(),
   email: text("email").notNull().unique(),
   emailVerified: timestamp("email_verified", { mode: "date", withTimezone: true }),
+  role: userRoleEnum("user_role").default("public"),
   createdAt: timestamp("created_at")
     .notNull()
     .default(sql`now()`),
@@ -38,7 +39,6 @@ export const profiles = pgTable("profile", {
     .notNull()
     .references(() => users.id, { onDelete: "cascade" }),
   displayName: text("display_name"),
-  role: userRoleEnum("user_role").default("public"),
   imageUrl: text("image_url"),
   bio: text("bio").notNull().default(""),
 });

@@ -1,11 +1,9 @@
 import { z, ZodType } from "zod";
 
-import { userRoleEnum } from "@/data-access/orm/schema";
-
 // *******************  Enum  ******************************
 
 const UserRoleEnum = z.enum(["public", "athlete", "admin"]);
-export type UserRoleEnumT = typeof userRoleEnum;
+export type UserRoleEnumT = typeof UserRoleEnum._type;
 
 const AccountTypeEnum = z.enum(["email", "google", "strava"]);
 export type AccountTypeEnumT = typeof AccountTypeEnum._type;
