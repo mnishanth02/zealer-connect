@@ -1,6 +1,7 @@
 import { cache } from "react";
 import { cookies } from "next/headers";
 import { DrizzlePostgreSQLAdapter } from "@lucia-auth/adapter-drizzle";
+import { Google, Strava } from "arctic";
 import { Lucia, type Session, type User } from "lucia";
 
 import { UserRoleEnumT } from "@/app/_shared/_schema/auth-form-schema";
@@ -68,4 +69,15 @@ export const validateRequest = cache(
     }
     return result;
   }
+);
+
+export const googleAuth = new Google(
+  env.GOOGLE_CLIENT_ID,
+  env.GOOGLE_CLIENT_SECRET,
+  `${env.NEXT_PUBLIC_APP_URL}/api/login/google/callback`
+);
+export const stravaAuth = new Strava(
+  env.STRAVA_CLIENT_ID,
+  env.STRAVA_CLIENT_SECRET,
+  `${env.NEXT_PUBLIC_APP_URL}/api/login/strava/callback`
 );

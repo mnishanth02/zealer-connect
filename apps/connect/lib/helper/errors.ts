@@ -12,6 +12,13 @@ export class AppError extends Error {
   }
 }
 
+export class GeneralError extends AppError {
+  constructor() {
+    super(ErrorCode.ERROR, "Error, Please try again Later");
+    this.name = "GeneralError";
+  }
+}
+
 export class AuthenticationError extends AppError {
   constructor() {
     super(ErrorCode.NOT_AUTHORIZED, "You must be logged in to view this content");

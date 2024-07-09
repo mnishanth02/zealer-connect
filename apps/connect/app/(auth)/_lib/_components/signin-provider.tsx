@@ -24,9 +24,11 @@ const SignInProvider: FC<SignInProviderProps> = () => {
             <Button isLoading={isPending} disabled={isPending} type="submit" className="w-full">
               Login
             </Button>
+
             <Button disabled={isPending} type="button" variant="outline" className="w-full">
-              Login with Google
+              <Link href={"/api/login/google"}>Login with Google</Link>
             </Button>
+
             <div className="mt-4 text-center text-sm">
               Don&apos;t have an account?{" "}
               <Link href="/sign-up" className="underline">

@@ -3,12 +3,16 @@ import { z } from "zod";
 
 import { AppError, EmailInUseError, ErrorCode, LoginError } from "@/lib/helper/errors";
 import { UserLoginSchema, UserSignupSchema, UserSignupType } from "@/app/_shared/_schema/auth-form-schema";
+import { GoogleUser } from "@/app/api/login/google/callback/route";
 
 import { InsertProfileType, SelectUserType } from "@/data-access/orm/schema/auth-db-schema";
 import {
   createAccount,
+  createAccountByGoogle,
   createProfile,
   createUser,
+  getAccountByGoogleId,
+  getAccountByStravaId,
   getAccountByUserId,
   getUserByEmail,
 } from "@/data-access/repositories/auth-repo";
@@ -90,27 +94,6 @@ export async function signInService(userData: z.infer<typeof UserLoginSchema>): 
 
 //  ******************* Helper Function ********************
 
-function getProfileData(userData: UserSignupType, userId: string) {
-  const dbProfile: InsertProfileType = {
-    userId,
-    displayName: userData.email,
-    imageUrl: "",
-    bio: "",
-  };
-
-  return dbProfile;
-}
-
-const ITERATIONS = 10000;
-async function hashPassword(plainTextPassword: string, salt: string) {
-  return new Promise<string>((resolve, reject) => {
-    crypto.pbkdf2(plainTextPassword, salt, ITERATIONS, 64, "sha512", (err, derivedKey) => {
-      if (err) reject(err);
-      resolve(derivedKey.toString("hex"));
-    });
-  });
-}
-
 export async function verifyPassword(user: SelectUserType, plainTextPassword: string) {
   const account = await getAccountByUserId(user.id);
 
@@ -127,4 +110,60 @@ export async function verifyPassword(user: SelectUserType, plainTextPassword: st
 
   const hash = await hashPassword(plainTextPassword, salt);
   return account.hashedPassword == hash;
+}
+
+export async function getAccountByGoogleIdService(googleId: string) {
+  return await getAccountByGoogleId(googleId);
+}
+export async function getAccountByStravaIdService(stravaId: string) {
+  return await getAccountByStravaId(stravaId);
+}
+
+export async function createGoogleUserService(googleUser: GoogleUser) {
+  let existingUser = await getUserByEmail(googleUser.email);
+
+  if (!existingUser) {
+    existingUser = await createUser(googleUser.email, "public");
+  }
+
+  if (!existingUser) {
+    throw new AppError(ErrorCode.ERROR, "Error While creating User");
+  }
+
+  await createAccountByGoogle(existingUser.id, googleUser.sub);
+
+  await createProfile(getProfileDataFromDbUser(existingUser));
+
+  return existingUser.id;
+}
+
+function getProfileData(userData: UserSignupType, userId: string) {
+  const dbProfile: InsertProfileType = {
+    userId,
+    displayName: userData.email,
+    imageUrl: "",
+    bio: "",
+  };
+
+  return dbProfile;
+}
+function getProfileDataFromDbUser(userData: SelectUserType) {
+  const dbProfile: InsertProfileType = {
+    userId: userData.id,
+    displayName: userData.email,
+    imageUrl: "",
+    bio: "",
+  };
+
+  return dbProfile;
+}
+
+const ITERATIONS = 10000;
+async function hashPassword(plainTextPassword: string, salt: string) {
+  return new Promise<string>((resolve, reject) => {
+    crypto.pbkdf2(plainTextPassword, salt, ITERATIONS, 64, "sha512", (err, derivedKey) => {
+      if (err) reject(err);
+      resolve(derivedKey.toString("hex"));
+    });
+  });
 }

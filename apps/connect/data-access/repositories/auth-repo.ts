@@ -33,11 +33,7 @@ export async function createUser(email: string, role: UserRoleEnumT) {
         email,
         role,
       })
-      .returning({
-        id: users.id,
-        email: users.email,
-        role: users.role,
-      });
+      .returning();
     return user;
   } catch (error) {
     if (error instanceof Error && error.message.includes("unique constraint")) {
@@ -136,5 +132,15 @@ export async function createProfile(profileData: InsertProfileType) {
 export async function getAccountByUserId(userId: string) {
   return await db.query.accounts.findFirst({
     where: eq(accounts.userId, userId),
+  });
+}
+export async function getAccountByGoogleId(googleId: string) {
+  return await db.query.accounts.findFirst({
+    where: eq(accounts.googleId, googleId),
+  });
+}
+export async function getAccountByStravaId(stravaId: string) {
+  return await db.query.accounts.findFirst({
+    where: eq(accounts.stravaId, stravaId),
   });
 }
