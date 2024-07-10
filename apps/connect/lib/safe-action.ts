@@ -13,8 +13,8 @@ function shapeErrors({ err }: any) {
     const appError = err?.data.error as AppError;
     console.log("appError->", appError);
     return {
-      code: appError.code ?? "ERROR",
-      message: `${isDev ? "DEV ONLY ENABLED - " : ""}${appError.message}`,
+      code: appError?.code ?? "ERROR",
+      message: `${isDev ? "DEV ONLY ENABLED - " : ""}${appError?.message}`,
     };
   } else {
     return {

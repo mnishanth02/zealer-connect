@@ -64,9 +64,6 @@ async function HeaderActions() {
 function SignedInActions({ userId }: { userId: UserId }) {
   return (
     <div className="flex items-center gap-4">
-      <div className="hidden md:block">
-        <ThemeToggle />
-      </div>
       <Suspense fallback={<AvatarPlaceholder />}>
         <ProfileDropdown userId={userId} />
       </Suspense>

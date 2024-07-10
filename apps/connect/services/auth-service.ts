@@ -1,8 +1,14 @@
 import crypto from "crypto";
 import { z } from "zod";
 
+import { generateCustomId } from "@/lib/app-utils";
 import { AppError, EmailInUseError, ErrorCode, LoginError, NotFoundError } from "@/lib/helper/errors";
-import { UserLoginSchema, UserSignupSchema, UserSignupType } from "@/app/_shared/_schema/auth-form-schema";
+import {
+  UserLoginSchema,
+  UserRoleEnumT,
+  UserSignupSchema,
+  UserSignupType,
+} from "@/app/_shared/_schema/auth-form-schema";
 import { GoogleUser } from "@/app/api/login/google/callback/route";
 
 import { InsertProfileType, SelectUserType } from "@/data-access/orm/schema/auth-db-schema";
@@ -149,9 +155,12 @@ export async function createGoogleUserService(googleUser: GoogleUser) {
 }
 
 function getProfileData(userData: UserSignupType, userId: string) {
+  const customUserId = generateCustomUserId(userData.role);
+
   const dbProfile: InsertProfileType = {
     userId,
     displayName: userData.email,
+    athleteId: customUserId,
     imageUrl: "",
     bio: "",
   };
@@ -159,14 +168,35 @@ function getProfileData(userData: UserSignupType, userId: string) {
   return dbProfile;
 }
 function getProfileDataFromDbUser(userData: SelectUserType) {
+  const customUserId = generateCustomUserId(userData.role);
   const dbProfile: InsertProfileType = {
     userId: userData.id,
     displayName: userData.email,
+    athleteId: customUserId,
     imageUrl: "",
     bio: "",
   };
 
   return dbProfile;
+}
+
+function generateCustomUserId(role: UserRoleEnumT | null) {
+  let customId = "";
+  switch (role) {
+    case "admin":
+      customId = `C${generateCustomId()}`;
+      break;
+    case "athlete":
+      customId = `A${generateCustomId()}`;
+      break;
+    case "public":
+      customId = `U${generateCustomId()}`;
+      break;
+    default:
+      customId = `U${generateCustomId()}`;
+      break;
+  }
+  return customId;
 }
 
 const ITERATIONS = 10000;

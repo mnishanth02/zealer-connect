@@ -4,6 +4,12 @@ EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;
 --> statement-breakpoint
+DO $$ BEGIN
+ CREATE TYPE "public"."user_role" AS ENUM('public', 'athlete', 'admin');
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "accounts" (
 	"id" serial PRIMARY KEY NOT NULL,
 	"user_id" text NOT NULL,
@@ -12,7 +18,6 @@ CREATE TABLE IF NOT EXISTS "accounts" (
 	"strava_id" text,
 	"hashed_password" text,
 	"salt" text,
-	CONSTRAINT "accounts_user_id_unique" UNIQUE("user_id"),
 	CONSTRAINT "accounts_google_id_unique" UNIQUE("google_id"),
 	CONSTRAINT "accounts_strava_id_unique" UNIQUE("strava_id")
 );
@@ -20,14 +25,31 @@ CREATE TABLE IF NOT EXISTS "accounts" (
 CREATE TABLE IF NOT EXISTS "profile" (
 	"id" serial PRIMARY KEY NOT NULL,
 	"user_id" text NOT NULL,
+	"athlete_id" varchar(6) NOT NULL,
 	"display_name" text,
-	"user_role" "user_role" DEFAULT 'public',
+	"sport" text,
 	"image_url" text,
 	"bio" text DEFAULT '' NOT NULL,
-	CONSTRAINT "profile_user_id_unique" UNIQUE("user_id")
+	CONSTRAINT "profile_athlete_id_unique" UNIQUE("athlete_id")
 );
 --> statement-breakpoint
-ALTER TABLE "user" ADD COLUMN "email_verified" timestamp with time zone;--> statement-breakpoint
+CREATE TABLE IF NOT EXISTS "session" (
+	"id" text PRIMARY KEY NOT NULL,
+	"user_id" text NOT NULL,
+	"expires_at" timestamp with time zone NOT NULL
+);
+--> statement-breakpoint
+CREATE TABLE IF NOT EXISTS "user" (
+	"id" text PRIMARY KEY NOT NULL,
+	"email" text NOT NULL,
+	"email_verified" timestamp with time zone,
+	"user_role" "user_role" DEFAULT 'public',
+	"created_at" timestamp DEFAULT now() NOT NULL,
+	"updated_at" timestamp DEFAULT now() NOT NULL,
+	CONSTRAINT "user_id_unique" UNIQUE("id"),
+	CONSTRAINT "user_email_unique" UNIQUE("email")
+);
+--> statement-breakpoint
 DO $$ BEGIN
  ALTER TABLE "accounts" ADD CONSTRAINT "accounts_user_id_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."user"("id") ON DELETE cascade ON UPDATE no action;
 EXCEPTION
@@ -40,6 +62,8 @@ EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;
 --> statement-breakpoint
-ALTER TABLE "user" DROP COLUMN IF EXISTS "hashed_password";--> statement-breakpoint
-ALTER TABLE "user" DROP COLUMN IF EXISTS "name";--> statement-breakpoint
-ALTER TABLE "user" DROP COLUMN IF EXISTS "user_role";
+DO $$ BEGIN
+ ALTER TABLE "session" ADD CONSTRAINT "session_user_id_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."user"("id") ON DELETE no action ON UPDATE no action;
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;

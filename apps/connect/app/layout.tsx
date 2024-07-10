@@ -23,7 +23,7 @@ export default async function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={cn("bg-background flex min-h-screen flex-col antialiased", jakarta.className)}>
+      <body className={cn("bg-background flex flex-col antialiased", jakarta.className)}>
         <Providers>{children}</Providers>
       </body>
     </html>

@@ -48,7 +48,7 @@ export const signInAction = unauthenticatedAction
 
     if (error) {
       const status = getHttpStatusFromErrorCode(error.code);
-      throw new ZSAError(error.code, { status, cause: error });
+      throw new ZSAError(error.code, { status, error });
     }
 
     if (!data) {

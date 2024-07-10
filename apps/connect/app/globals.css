@@ -92,5 +92,5 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  @apply bg-primary/60 rounded-full;
+  @apply bg-primary/70 rounded-full;
 }
