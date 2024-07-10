@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import ThemeToggle from "@ui/components/common/theme-toggle";
 import { Avatar, AvatarFallback, AvatarImage } from "@ui/components/ui/avatar";
-import { Button } from "@ui/components/ui/button";
+import { buttonVariants } from "@ui/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -12,6 +12,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@ui/components/ui/dropdown-menu";
+import { cn } from "@ui/lib/utils";
 import { UserId } from "lucia";
 import { Loader2Icon, LogOut } from "lucide-react";
 
@@ -21,24 +22,18 @@ import { getUserProfileService } from "@/services/auth-service";
 import HeaderLayout from "./header-layout";
 import { MenuButton } from "./menu-button";
 
-const profileLoader = cache(async (userId: UserId) => {
-  try {
-    return await getUserProfileService(userId);
-  } catch (error) {
-    console.error("Error loading user profile:", error);
-    return null;
-  }
-});
+const profileLoader = cache(getUserProfileService);
 
 export function Header() {
   return (
     <HeaderLayout>
       <div className="flex items-center justify-between">
         <div className="flex items-center justify-start">
-          <Image src="/logo.svg" alt="logo" width={80} height={80} />
+          <Image src="/logo.png" alt="logo" width={40} height={0} />
         </div>
         <div className="flex items-center justify-between gap-5">
           <Suspense fallback={<LoadingSpinner />}>
+            <ThemeToggle />
             <HeaderActions />
           </Suspense>
         </div>
@@ -68,7 +63,7 @@ async function HeaderActions() {
 
 function SignedInActions({ userId }: { userId: UserId }) {
   return (
-    <>
+    <div className="flex items-center gap-4">
       <div className="hidden md:block">
         <ThemeToggle />
       </div>
@@ -78,18 +73,15 @@ function SignedInActions({ userId }: { userId: UserId }) {
       <div className="md:hidden">
         <MenuButton />
       </div>
-    </>
+    </div>
   );
 }
 
 function SignedOutActions() {
   return (
-    <>
-      <ThemeToggle />
-      <Button asChild>
-        <Link href="/sign-in">Sign In</Link>
-      </Button>
-    </>
+    <Link href="/sign-in" className={cn(buttonVariants())}>
+      Sign In
+    </Link>
   );
 }
 
@@ -97,8 +89,8 @@ async function ProfileAvatar({ userId }: { userId: UserId }) {
   const profile = await profileLoader(userId);
 
   return (
-    <Avatar>
-      <AvatarImage src="/logo.svg" alt="User avatar" />
+    <Avatar className="flex items-center justify-center">
+      <AvatarImage src="/logo.png" alt="User avatar" />
       <AvatarFallback>{profile?.displayName?.substring(0, 2).toUpperCase() ?? "U"}</AvatarFallback>
     </Avatar>
   );

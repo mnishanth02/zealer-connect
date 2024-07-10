@@ -12,7 +12,7 @@ const jakarta = Plus_Jakarta_Sans({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: "Zealer Connect",
   description: "Zealers Space for Runners, Trekkers and All Fitness enthusiasts",
-  icons: [{ rel: "icon", type: "image/svg", sizes: "48x48", url: "/logo.svg" }],
+  icons: [{ rel: "icon", type: "image/png", sizes: "48x48", url: "/logo.png" }],
   keywords: "connect",
 };
 
