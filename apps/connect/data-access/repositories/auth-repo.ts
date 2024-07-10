@@ -144,3 +144,11 @@ export async function getAccountByStravaId(stravaId: string) {
     where: eq(accounts.stravaId, stravaId),
   });
 }
+
+export async function getProfile(userId: string) {
+  const profile = await db.query.profiles.findFirst({
+    where: eq(profiles.userId, userId),
+  });
+
+  return profile;
+}

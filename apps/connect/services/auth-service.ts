@@ -1,7 +1,7 @@
 import crypto from "crypto";
 import { z } from "zod";
 
-import { AppError, EmailInUseError, ErrorCode, LoginError } from "@/lib/helper/errors";
+import { AppError, EmailInUseError, ErrorCode, LoginError, NotFoundError } from "@/lib/helper/errors";
 import { UserLoginSchema, UserSignupSchema, UserSignupType } from "@/app/_shared/_schema/auth-form-schema";
 import { GoogleUser } from "@/app/api/login/google/callback/route";
 
@@ -14,6 +14,7 @@ import {
   getAccountByGoogleId,
   getAccountByStravaId,
   getAccountByUserId,
+  getProfile,
   getUserByEmail,
 } from "@/data-access/repositories/auth-repo";
 import { ServiceResponse } from "@/shared/type";
@@ -90,6 +91,16 @@ export async function signInService(userData: z.infer<typeof UserLoginSchema>): 
       }),
     };
   }
+}
+
+export async function getUserProfileService(userId: string) {
+  const profile = await getProfile(userId);
+
+  if (!profile) {
+    throw new NotFoundError();
+  }
+
+  return profile;
 }
 
 //  ******************* Helper Function ********************
