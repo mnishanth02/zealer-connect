@@ -1,13 +1,12 @@
 import type { Metadata } from "next";
-import { Plus_Jakarta_Sans } from "next/font/google";
 
 import "./globals.css";
 
 import { cn } from "@repo/ui/lib/utils";
 
-import { Providers } from "./_shared/_providers/providers";
+import { fontMono, giestSans } from "@/lib/fonts";
 
-const jakarta = Plus_Jakarta_Sans({ subsets: ["latin"] });
+import { Providers } from "./_shared/_providers/providers";
 
 export const metadata: Metadata = {
   title: "Zealer Connect",
@@ -23,7 +22,7 @@ export default async function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={cn("bg-background flex flex-col antialiased", jakarta.className)}>
+      <body className={cn("bg-background flex flex-col font-sans antialiased", giestSans.variable, fontMono.variable)}>
         <Providers>{children}</Providers>
       </body>
     </html>

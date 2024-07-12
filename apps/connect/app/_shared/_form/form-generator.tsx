@@ -1,6 +1,6 @@
 "use client";
 
-import { Calendar } from "@ui/components/ui/calendar";
+import { useCallback } from "react";
 import { Input } from "@ui/components/ui/input";
 import { Label } from "@ui/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@ui/components/ui/radio-group";
@@ -8,6 +8,8 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectVa
 import { Switch } from "@ui/components/ui/switch";
 import { Textarea } from "@ui/components/ui/textarea";
 import { Control, Controller, FieldErrors, FieldValues } from "react-hook-form";
+
+import { useCalendar } from "../hooks/useCalendar";
 
 type Props = {
   type: "text" | "email" | "password" | "date" | "radio" | "switch";
@@ -38,16 +40,21 @@ const FormGenerator = ({
   options,
   switchDescription,
 }: Props) => {
-  const renderErrorMessage = (fieldName: string) => {
-    const error = errors[fieldName];
-    if (error && typeof error === "object" && "message" in error) {
-      const message = error.message;
-      if (typeof message === "string" && message !== "Required") {
-        return <p className="text-destructive text-sm">{message}</p>;
+  const renderErrorMessage = useCallback(
+    (fieldName: string) => {
+      const error = errors[fieldName];
+      if (error && typeof error === "object" && "message" in error) {
+        const message = error.message;
+        if (typeof message === "string" && message !== "Required") {
+          return <p className="text-destructive text-sm">{message}</p>;
+        }
       }
-    }
-    return null;
-  };
+      return null;
+    },
+    [errors]
+  );
+
+  const { DatePicker } = useCalendar({ control, defaultValue, name, label, renderErrorMessage });
 
   switch (inputType) {
     case "input":
@@ -60,14 +67,7 @@ const FormGenerator = ({
             control={control}
             defaultValue={defaultValue}
             render={({ field }) => (
-              <Input
-                {...field}
-                id={`input-${label || name}`}
-                type={type}
-                placeholder={placeholder}
-                form={form}
-                value={field.value}
-              />
+              <Input {...field} id={`input-${label || name}`} type={type} placeholder={placeholder} form={form} />
             )}
           />
           {renderErrorMessage(name)}
@@ -111,14 +111,7 @@ const FormGenerator = ({
             control={control}
             defaultValue={defaultValue}
             render={({ field }) => (
-              <Textarea
-                {...field}
-                id={`input-${label}`}
-                placeholder={placeholder}
-                form={form}
-                rows={lines}
-                value={field.value}
-              />
+              <Textarea {...field} id={`input-${label}`} placeholder={placeholder} form={form} rows={lines} />
             )}
           />
           {renderErrorMessage(name)}
@@ -162,20 +155,7 @@ const FormGenerator = ({
         </div>
       );
     case "date":
-      return (
-        <div className="flex flex-col space-y-2">
-          {label && <Label>{label}</Label>}
-          <Controller
-            name={name}
-            control={control}
-            defaultValue={defaultValue as Date}
-            render={({ field }) => (
-              <Calendar mode="single" selected={field.value} onSelect={field.onChange} className="rounded-md border" />
-            )}
-          />
-          {renderErrorMessage(name)}
-        </div>
-      );
+      return <DatePicker />;
   }
 };
 

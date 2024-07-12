@@ -42,8 +42,6 @@ export const signInAction = unauthenticatedAction
   .handler(async ({ input }) => {
     await rateLimitByKey({ key: input.email, limit: 3, window: 10000 });
 
-    // const { data, error } = await signupService(input);
-
     const { data, error } = await signInService(input);
 
     if (error) {

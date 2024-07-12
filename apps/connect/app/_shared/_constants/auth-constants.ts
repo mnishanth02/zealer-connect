@@ -1,4 +1,4 @@
-type SignupFormProps = {
+export type DynamicFormProps = {
   id: string;
   type: "text" | "email" | "password" | "date" | "radio" | "switch";
   inputType: "select" | "input" | "textarea" | "radio" | "switch" | "date";
@@ -10,7 +10,7 @@ type SignupFormProps = {
   width?: string;
 };
 
-export const USER_REGISTRATION_FORM: SignupFormProps[] = [
+export const USER_REGISTRATION_FORM: DynamicFormProps[] = [
   {
     id: "1",
     inputType: "input",
@@ -68,7 +68,7 @@ export const USER_REGISTRATION_FORM: SignupFormProps[] = [
   },
 ];
 
-export const USER_LOGIN_FORM: SignupFormProps[] = [
+export const USER_LOGIN_FORM: DynamicFormProps[] = [
   {
     id: "1",
     inputType: "input",

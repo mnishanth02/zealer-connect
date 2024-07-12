@@ -87,7 +87,7 @@ async function ProfileAvatar({ userId }: { userId: UserId }) {
 
   return (
     <Avatar className="flex items-center justify-center">
-      <AvatarImage src="/logo.png" alt="User avatar" />
+      <AvatarImage src="/logo.png" alt="User avatar" width={40} height={0} />
       <AvatarFallback>{profile?.displayName?.substring(0, 2).toUpperCase() ?? "U"}</AvatarFallback>
     </Avatar>
   );
