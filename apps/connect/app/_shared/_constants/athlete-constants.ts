@@ -1,9 +1,4 @@
-import { DynamicFormProps } from "./auth-constants";
-
-type TABS_MENU_PROPS = {
-  label: string;
-  icon?: JSX.Element;
-};
+import { DynamicFormProps, TABS_MENU_PROPS } from "./type";
 
 export const ATHLETE_SETTINGS_TAB: TABS_MENU_PROPS[] = [
   {
@@ -11,9 +6,6 @@ export const ATHLETE_SETTINGS_TAB: TABS_MENU_PROPS[] = [
   },
   {
     label: "athletic",
-  },
-  {
-    label: "achievements",
   },
   {
     label: "settings",
@@ -80,6 +72,26 @@ export const PERSONAL_FORM: DynamicFormProps[] = [
   },
   {
     id: "5",
+    inputType: "input",
+    placeholder: "example@zealer.in",
+    name: "email",
+    type: "email",
+    row: 3,
+    label: "Email",
+    width: "w-1/2",
+  },
+  {
+    id: "6",
+    type: "tel",
+    inputType: "input",
+    placeholder: "+91 123 456 7890",
+    name: "phone",
+    row: 3,
+    label: "Phone Number",
+    width: "w-1/2",
+  },
+  {
+    id: "6",
     inputType: "textarea",
     placeholder: "Tell us about yourself",
     name: "bio",
@@ -93,59 +105,179 @@ export const PERSONAL_FORM: DynamicFormProps[] = [
 export const ATHLETIC_FORM: DynamicFormProps[] = [
   {
     id: "1",
-    inputType: "input",
-    placeholder: "e.g., Running",
+    inputType: "select",
+    placeholder: " Select primary sport",
     name: "primarySport",
     type: "text",
     row: 1,
     label: "Primary Sport",
     width: "w-1/2",
+    options: [
+      {
+        id: "1",
+        label: "Running",
+        value: "running",
+      },
+      {
+        id: "2",
+        label: "Trekking",
+        value: "trekking",
+      },
+      {
+        id: "3",
+        label: "Cycling",
+        value: "cycling",
+      },
+      {
+        id: "4",
+        label: "Swimming",
+        value: "swimming",
+      },
+      {
+        id: "5",
+        label: "Other",
+        value: "other",
+      },
+    ],
   },
   {
     id: "2",
     inputType: "input",
-    placeholder: "e.g., Marathon",
-    name: "speciality",
-    type: "text",
-    row: 1,
-    label: "Speciality",
-    width: "w-1/2",
-  },
-  {
-    id: "3",
-    inputType: "input",
     placeholder: "e.g., 5",
     name: "experience",
     type: "text",
-    row: 2,
+    row: 1,
     label: "Experience",
     width: "w-1/2",
   },
+
+  {
+    id: "3",
+    inputType: "input",
+    placeholder: "e.g., Marathon",
+    name: "speciality",
+    type: "text",
+    row: 2,
+    label: "Speciality",
+    width: "w-1/2",
+  },
+
   {
     id: "4",
     inputType: "select",
-    placeholder: "Select status",
-    name: "proStatus",
+    placeholder: "Select training frequency",
+    name: "trainingFrequency",
     type: "text",
     row: 2,
-    label: "Professional Status",
+    label: "Training Frequency",
     width: "w-1/2",
     options: [
       {
         id: "1",
-        label: "Amateur",
-        value: "amateur",
+        label: "1-2 times per week",
+        value: "1-2",
       },
       {
         id: "2",
-        label: "Semi-Pro",
-        value: "semiPro",
+        label: "3-4 times per week",
+        value: "3-4",
       },
       {
         id: "3",
-        label: "Professional",
-        value: "professional",
+        label: "5+ times per week",
+        value: "5+",
       },
     ],
+  },
+  {
+    id: "5",
+    inputType: "textarea",
+    placeholder: "Goals for your next year",
+    name: "goals",
+    type: "text",
+    row: 3,
+    label: "Athlete Goals",
+    width: "w-full",
+  },
+];
+
+export const SETTINGS_FORM: DynamicFormProps[] = [
+  {
+    id: "1",
+    inputType: "select",
+    placeholder: "Select visibility",
+    name: "visibility",
+    type: "text",
+    row: 1,
+    label: "Profile Visibility",
+    width: "w-1/2",
+    options: [
+      {
+        id: "1",
+        label: "Public",
+        value: "public",
+      },
+      {
+        id: "2",
+        label: "Private",
+        value: "private",
+      },
+      {
+        id: "3",
+        label: "Registered users only",
+        value: "registered users only",
+      },
+    ],
+  },
+  {
+    id: "2",
+    inputType: "select",
+    placeholder: "Select preferred units",
+    name: "preferredUnits",
+    type: "text",
+    row: 1,
+    label: "Preferred Units",
+    width: "w-1/2",
+    options: [
+      {
+        id: "1",
+        label: "Metric (km, kg)",
+        value: "metric",
+      },
+      {
+        id: "2",
+        label: "Imperial (miles, lbs)",
+        value: "imperial",
+      },
+      {
+        id: "3",
+        label: "Registered users only",
+        value: "registered users only",
+      },
+    ],
+  },
+
+  {
+    id: "3",
+    inputType: "switch",
+    placeholder: "enable Notification",
+    name: "enableEmailNotify",
+    type: "switch",
+    row: 2,
+    label: "Enable Email Notification",
+    switchDescription: "",
+    width: "w-1/2",
+  },
+
+  {
+    id: "3",
+    inputType: "switch",
+    placeholder: "enable activity tracking",
+    name: "allowActivityTrack",
+    type: "switch",
+    row: 3,
+    label: "Allow activity tracking",
+    switchDescription: "",
+    width: "w-1/2",
   },
 ];

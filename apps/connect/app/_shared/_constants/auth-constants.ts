@@ -1,14 +1,4 @@
-export type DynamicFormProps = {
-  id: string;
-  type: "text" | "email" | "password" | "date" | "radio" | "switch";
-  inputType: "select" | "input" | "textarea" | "radio" | "switch" | "date";
-  placeholder: string;
-  name: string;
-  options?: { value: string; label: string; id: string }[];
-  label?: string;
-  row?: number;
-  width?: string;
-};
+import { DynamicFormProps } from "./type";
 
 export const USER_REGISTRATION_FORM: DynamicFormProps[] = [
   {

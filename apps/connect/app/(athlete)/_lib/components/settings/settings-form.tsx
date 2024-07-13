@@ -3,15 +3,15 @@ import { cn } from "@ui/lib/utils";
 import { useFormContext } from "react-hook-form";
 import { useMedia } from "react-use";
 
-import { ATHLETIC_FORM } from "@/app/_shared/_constants/athlete-constants";
+import { SETTINGS_FORM } from "@/app/_shared/_constants/athlete-constants";
 import FormGenerator from "@/app/_shared/_form/form-generator";
 
-type FormField = (typeof ATHLETIC_FORM)[0] & {
+type FormField = (typeof SETTINGS_FORM)[0] & {
   row?: number;
   width?: string;
 };
 
-const AthleticForm = () => {
+const SettingsForm = () => {
   const {
     control,
     formState: { errors },
@@ -19,7 +19,7 @@ const AthleticForm = () => {
 
   const isWide = useMedia("(max-width: 768px)");
 
-  const fieldsByRow = (ATHLETIC_FORM as FormField[]).reduce(
+  const fieldsByRow = (SETTINGS_FORM as FormField[]).reduce(
     (acc, field) => {
       const row = field.row || 0; // Default to row 0 if not specified
       if (!acc[row]) {
@@ -34,8 +34,8 @@ const AthleticForm = () => {
   return (
     <>
       <CardHeader>
-        <CardTitle className="text-xl font-semibold md:text-2xl">Athletic Information</CardTitle>
-        <CardDescription>Provide details about your athletic career and specialities</CardDescription>
+        <CardTitle className="text-xl font-semibold md:text-2xl">Profile Settings</CardTitle>
+        <CardDescription>Manage your account settings and preferences.</CardDescription>
       </CardHeader>
       <CardContent className="flex flex-col gap-3">
         {Object.entries(fieldsByRow).map(([row, fields]) => (
@@ -52,4 +52,4 @@ const AthleticForm = () => {
   );
 };
 
-export default AthleticForm;
+export default SettingsForm;

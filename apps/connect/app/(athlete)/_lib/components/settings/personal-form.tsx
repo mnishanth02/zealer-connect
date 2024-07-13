@@ -17,7 +17,7 @@ const PersonalForm = () => {
     formState: { errors },
   } = useFormContext();
 
-  const iswide = useMedia("(max-width: 768px)");
+  const isWide = useMedia("(max-width: 768px)");
 
   const fieldsByRow = (PERSONAL_FORM as FormField[]).reduce(
     (acc, field) => {
@@ -37,11 +37,11 @@ const PersonalForm = () => {
         <CardTitle className="text-xl font-semibold md:text-2xl">Personal Information</CardTitle>
         <CardDescription>Update your personal details</CardDescription>
       </CardHeader>
-      <CardContent className="space-y-2">
+      <CardContent className="flex flex-col gap-3">
         {Object.entries(fieldsByRow).map(([row, fields]) => (
-          <div key={row} className={iswide ? "flex flex-col gap-3" : "flex flex-wrap"}>
+          <div key={row} className={isWide ? "flex flex-col" : "flex flex-wrap"}>
             {fields.map((field) => (
-              <div key={field.id} className={cn("px-2", iswide ? "w-full" : `${field.width}`)}>
+              <div key={field.id} className={cn("px-2", isWide ? "w-full" : `${field.width}`)}>
                 <FormGenerator control={control} {...field} errors={errors} name={field.name} />
               </div>
             ))}

@@ -1,4 +1,5 @@
-import { useCallback, useMemo, useState } from "react";
+/* eslint-disable no-unused-vars */
+import { ReactNode, useCallback, useMemo, useState } from "react";
 import { Button } from "@ui/components/ui/button";
 import { Calendar } from "@ui/components/ui/calendar";
 import { Label } from "@ui/components/ui/label";
@@ -10,10 +11,10 @@ import { Control, Controller, useWatch } from "react-hook-form";
 
 type Props = {
   control: Control<any>;
-  defaultValue?: string | boolean | Date;
+  defaultValue?: string | boolean | Date | number;
   name: string;
   label?: string;
-  renderErrorMessage: (fieldName: string) => JSX.Element | null;
+  renderErrorMessage: (name: string) => ReactNode | null;
 };
 
 export const useCalendar = ({ control, defaultValue, name, label, renderErrorMessage }: Props) => {

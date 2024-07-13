@@ -12,8 +12,8 @@ import { Control, Controller, FieldErrors, FieldValues } from "react-hook-form";
 import { useCalendar } from "../hooks/useCalendar";
 
 type Props = {
-  type: "text" | "email" | "password" | "date" | "radio" | "switch";
-  inputType: "select" | "input" | "textarea" | "radio" | "switch" | "date";
+  type: "text" | "email" | "password" | "date" | "radio" | "switch" | "number" | "tel" | "url" | "time";
+  inputType: "select" | "input" | "textarea" | "radio" | "switch" | "date" | "number" | "tel" | "url" | "time";
   options?: { value: string; label: string; id: string }[];
   label?: string;
   control: Control<any>;
@@ -22,8 +22,11 @@ type Props = {
   errors: FieldErrors<FieldValues>;
   lines?: number;
   form?: string;
-  defaultValue?: string | boolean | Date;
+  defaultValue?: string | boolean | Date | number;
   switchDescription?: string;
+  min?: number;
+  max?: number;
+  step?: number;
 };
 
 const FormGenerator = ({
@@ -39,6 +42,9 @@ const FormGenerator = ({
   lines,
   options,
   switchDescription,
+  min,
+  max,
+  step,
 }: Props) => {
   const renderErrorMessage = useCallback(
     (fieldName: string) => {
@@ -53,12 +59,14 @@ const FormGenerator = ({
     },
     [errors]
   );
-
   const { DatePicker } = useCalendar({ control, defaultValue, name, label, renderErrorMessage });
 
   switch (inputType) {
     case "input":
-    default:
+    case "number":
+    case "tel":
+    case "url":
+    case "time":
       return (
         <Label className="flex flex-col gap-2" htmlFor={`input-${label}`}>
           {label && <Label>{label}</Label>}
@@ -67,7 +75,16 @@ const FormGenerator = ({
             control={control}
             defaultValue={defaultValue}
             render={({ field }) => (
-              <Input {...field} id={`input-${label || name}`} type={type} placeholder={placeholder} form={form} />
+              <Input
+                {...field}
+                id={`input-${label || name}`}
+                type={type}
+                placeholder={placeholder}
+                form={form}
+                min={min}
+                max={max}
+                step={step}
+              />
             )}
           />
           {renderErrorMessage(name)}
@@ -156,6 +173,8 @@ const FormGenerator = ({
       );
     case "date":
       return <DatePicker />;
+    default:
+      return null;
   }
 };
 

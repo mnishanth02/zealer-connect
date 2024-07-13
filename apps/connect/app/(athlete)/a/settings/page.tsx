@@ -3,9 +3,9 @@ import { TabsContent } from "@ui/components/ui/tabs";
 
 import { ATHLETE_SETTINGS_TAB } from "@/app/_shared/_constants/athlete-constants";
 import ZTabsMenu from "@/app/_shared/_form/z-tabs";
-
-import AthleticFormProvider from "../../_lib/components/settings/athletic-form-provider";
-import PersonalFormProvider from "../../_lib/components/settings/personal-form-provider";
+import AthleticFormProvider from "@/app/(athlete)/_lib/components/settings/athletic-form-provider";
+import PersonalFormProvider from "@/app/(athlete)/_lib/components/settings/personal-form-provider";
+import SettingsFormProvider from "@/app/(athlete)/_lib/components/settings/settings-form-provider";
 
 const ProfilePage = () => {
   return (
@@ -21,8 +21,9 @@ const ProfilePage = () => {
           <TabsContent value={ATHLETE_SETTINGS_TAB[1]!.label}>
             <AthleticFormProvider />
           </TabsContent>
-          <TabsContent value={ATHLETE_SETTINGS_TAB[2]!.label}>achievements</TabsContent>
-          <TabsContent value={ATHLETE_SETTINGS_TAB[3]!.label}>settings</TabsContent>
+          <TabsContent value={ATHLETE_SETTINGS_TAB[2]!.label}>
+            <SettingsFormProvider />
+          </TabsContent>
         </div>
       </ZTabsMenu>
     </div>
