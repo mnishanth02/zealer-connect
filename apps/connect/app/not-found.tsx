@@ -1,12 +1,12 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { buttonVariants } from "@ui/components/ui/button";
 import { cn } from "@ui/lib/utils";
 
-export default function NotFound(): JSX.Element {
+export default function NotFound(): ReactNode {
   const [countdown, setCountdown] = useState(5);
   const router = useRouter();
 
@@ -35,7 +35,7 @@ export default function NotFound(): JSX.Element {
       <Link
         href="/"
         className={cn(
-          buttonVariants({ variant: "default", size: "lg" }), // Use typed object
+          buttonVariants({ variant: "default", size: "lg" }),
           "relative h-12 w-full min-w-[110px] max-w-[200px] items-center overflow-hidden rounded-full font-bold"
         )}
       >

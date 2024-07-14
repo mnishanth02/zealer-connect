@@ -86,10 +86,10 @@ export const useCalendar = ({ control, defaultValue, name, label, renderErrorMes
                   {field.value ? format(field.value, "PPP") : <span>Pick a date</span>}
                 </Button>
               </PopoverTrigger>
-              <PopoverContent className="w-auto p-4" style={{ minWidth: "300px" }}>
+              <PopoverContent className="w-auto py-3" style={{ minWidth: "300px" }}>
                 <div className="mb-4 flex justify-center space-x-2">
                   <Select onValueChange={handleYearChange} value={currentMonth.getFullYear().toString()}>
-                    <SelectTrigger className="w-[100px]">
+                    <SelectTrigger className="w-[90px]">
                       <SelectValue placeholder="Year" />
                     </SelectTrigger>
                     <SelectContent>
@@ -101,7 +101,7 @@ export const useCalendar = ({ control, defaultValue, name, label, renderErrorMes
                     </SelectContent>
                   </Select>
                   <Select onValueChange={handleMonthChange} value={months[currentMonth.getMonth()]}>
-                    <SelectTrigger className="w-[120px]">
+                    <SelectTrigger className="w-[110px]">
                       <SelectValue placeholder="Month" />
                     </SelectTrigger>
                     <SelectContent>
@@ -116,7 +116,7 @@ export const useCalendar = ({ control, defaultValue, name, label, renderErrorMes
                     onValueChange={(value) => handleDayChange(value, field.onChange)}
                     value={selectedDate.getDate().toString()}
                   >
-                    <SelectTrigger className="w-[100px]">
+                    <SelectTrigger className="w-[90px]">
                       <SelectValue placeholder="Day" />
                     </SelectTrigger>
                     <SelectContent>

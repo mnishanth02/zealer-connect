@@ -1,3 +1,5 @@
+import { ReactNode } from "react";
+
 type BaseFormProps = {
   id: string;
   placeholder: string;
@@ -59,5 +61,5 @@ export type DynamicFormProps =
 // **************** General Type *****************
 export type TABS_MENU_PROPS = {
   label: string;
-  icon?: JSX.Element;
+  icon?: ReactNode;
 };

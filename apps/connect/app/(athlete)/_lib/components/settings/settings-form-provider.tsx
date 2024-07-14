@@ -1,6 +1,7 @@
 "use client";
 
-import { FC } from "react";
+import React, { FC } from "react";
+import { Button } from "@ui/components/ui/button";
 import { Card } from "@ui/components/ui/card";
 import { FormProvider } from "react-hook-form";
 
@@ -10,14 +11,23 @@ import { useSettingsForm } from "@/app/(athlete)/_lib/hooks/useSettingsForm";
 interface SettingsFormProviderProps {}
 
 const SettingsFormProvider: FC<SettingsFormProviderProps> = () => {
-  const { methods, onHandleSubmit } = useSettingsForm();
+  const { methods, onHandleSubmit, isPending } = useSettingsForm();
   return (
     <section>
       <FormProvider {...methods}>
-        <form onSubmit={onHandleSubmit}>
-          <Card className="">
+        <form onSubmit={onHandleSubmit} className={"flex flex-col gap-4"}>
+          <Card className={"min-h-[260px]"}>
             <SettingsForm />
           </Card>
+          <div className={"flex justify-end gap-2"}>
+            <Button isLoading={isPending} disabled={isPending} type="submit">
+              Save changes
+            </Button>
+
+            <Button disabled={isPending} type="button" variant="outline">
+              Cancel
+            </Button>
+          </div>
         </form>
       </FormProvider>
     </section>
